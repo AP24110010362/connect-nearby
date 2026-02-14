@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useAppStore } from '@/store/appStore';
 import { Search, Bell, Wifi } from 'lucide-react';
 
 export default function TopBar() {
-  const { nearbyUsers, connectionIndex } = useAppStore();
+  const { nearbyUsers, connectionIndex, setActivePanel, notifications, searchQuery, setSearchQuery } = useAppStore();
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <div className="absolute top-4 left-20 right-4 z-[500] flex items-center gap-3">
@@ -13,6 +15,8 @@ export default function TopBar() {
           <input
             type="text"
             placeholder="Search people, interests, events..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 bg-transparent text-sm text-card-foreground placeholder:text-muted-foreground outline-none"
           />
         </div>
@@ -30,9 +34,16 @@ export default function TopBar() {
           <span className="text-xs font-medium text-card-foreground">Index: {connectionIndex}</span>
         </div>
 
-        <button className="relative p-2.5 rounded-xl bg-card/90 backdrop-blur-md border border-border shadow-card hover:shadow-card-hover transition-shadow">
+        <button
+          onClick={() => setActivePanel('notifications')}
+          className="relative p-2.5 rounded-xl bg-card/90 backdrop-blur-md border border-border shadow-card hover:shadow-card-hover transition-shadow"
+        >
           <Bell className="w-4 h-4 text-card-foreground" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full gradient-coral text-[10px] text-secondary-foreground flex items-center justify-center font-bold">3</span>
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full gradient-coral text-[10px] text-secondary-foreground flex items-center justify-center font-bold">
+              {unreadCount}
+            </span>
+          )}
         </button>
       </div>
     </div>
