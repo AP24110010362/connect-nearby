@@ -1,14 +1,21 @@
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { useAppStore } from '@/store/appStore';
 import { createUserIcon, createEventIcon, createCurrentUserIcon } from './MapMarkers';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// India bounds
+const INDIA_BOUNDS: L.LatLngBoundsExpression = [
+  [6.5, 68.0],   // SW
+  [35.5, 97.5],  // NE
+];
 
 export default function CommunityMap() {
   const { nearbyUsers, events, currentUser, setSelectedUser } = useAppStore();
 
   const center: [number, number] = currentUser
     ? [currentUser.lat, currentUser.lng]
-    : [42.3601, -71.0942];
+    : [28.5459, 77.1926];
 
   return (
     <MapContainer
@@ -17,12 +24,14 @@ export default function CommunityMap() {
       className="w-full h-full"
       zoomControl={false}
       attributionControl={false}
+      minZoom={5}
+      maxBounds={INDIA_BOUNDS}
+      maxBoundsViscosity={1.0}
     >
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
 
-      {/* Current user marker */}
       {currentUser && (
         <Marker
           position={[currentUser.lat, currentUser.lng]}
@@ -30,7 +39,6 @@ export default function CommunityMap() {
         />
       )}
 
-      {/* Nearby users */}
       {nearbyUsers.map((user) => (
         <Marker
           key={user.id}
@@ -42,7 +50,6 @@ export default function CommunityMap() {
         />
       ))}
 
-      {/* Events */}
       {events.map((event) => (
         <Marker
           key={event.id}

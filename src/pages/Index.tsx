@@ -7,6 +7,9 @@ import TopBar from '@/components/layout/TopBar';
 import EventsPanel from '@/components/panels/EventsPanel';
 import AidPanel from '@/components/panels/AidPanel';
 import DashboardPanel from '@/components/panels/DashboardPanel';
+import ChatPanel from '@/components/panels/ChatPanel';
+import NotificationsPanel from '@/components/panels/NotificationsPanel';
+import ProfilePanel from '@/components/panels/ProfilePanel';
 
 const Index = () => {
   const { selectedUser, currentUser, setSelectedUser } = useAppStore();
@@ -19,21 +22,16 @@ const Index = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      {/* Map Background */}
       <CommunityMap />
-
-      {/* Sidebar Navigation */}
       <Sidebar />
-
-      {/* Top Bar */}
       <TopBar />
-
-      {/* Side Panels */}
       <EventsPanel />
       <AidPanel />
       <DashboardPanel />
+      <ChatPanel />
+      <NotificationsPanel />
+      <ProfilePanel />
 
-      {/* User Profile Card */}
       <AnimatePresence>
         {selectedUser && (
           <UserProfileCard
